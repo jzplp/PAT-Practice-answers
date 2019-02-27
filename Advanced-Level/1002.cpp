@@ -1,43 +1,82 @@
-/***************************************************************************
- *  @file       1002.cpp
- *  @author     jzplp
- *  @date       15  Jan. 2017
- *  @remark     PAT-Advanced-Level 1002. A+B for Polynomials (25) 
- *  @note       answer
- ***************************************************************************/
-#include<cstdio>
-#include<map>
-using namespace::std;
-map<int,double> s;
+#include<vector>
+#include<stdio.h>
+using namespace std;
+struct stu
+{
+	int exponent;
+	float coefficient;
+};
 int main()
 {
-	int i1,t1;
-	double t2;
-	for(int z=0;z<2;z++)
+	vector<stu> A;
+	vector<stu> B;
+	vector<stu> C;
+	vector<stu> D;
+	int ka,kb,i;
+	stu stemp;
+	scanf("%d",&ka);
+	for(i = 0;i<ka;i++)
 	{
-		scanf("%d",&i1);
-		for(int i=0;i<i1;i++)
+		scanf("%d %f",&stemp.exponent,&stemp.coefficient);
+		A.push_back(stemp);
+	}
+	scanf("%d",&kb);
+	for(i = 0;i<kb;i++)
+	{
+		scanf("%d %f",&stemp.exponent,&stemp.coefficient);
+		B.push_back(stemp);
+	}
+	ka = ka-1;
+	kb = kb-1;
+	while(ka>=0 && kb>=0)
+	{
+		if(A[ka].exponent==B[kb].exponent)
 		{
-			scanf("%d%lf",&t1,&t2);
-			if(s.count(t1)==0)
-				s[t1]=t2;
-			else
-				s[t1]+=t2;
+			A[ka].coefficient+=B[kb].coefficient;
+			C.push_back(A[ka]);
+			ka--;
+			kb--;
+			continue;
+		}
+		if(A[ka].exponent>B[kb].exponent)
+		{
+			C.push_back(B[kb]); 
+			kb--;
+			continue;
+		}
+		if(A[ka].exponent<B[kb].exponent)
+		{
+			C.push_back(A[ka]); 
+			ka--;
+			continue;
 		}
 	}
-	i1=0;
-	for(map<int,double>::const_iterator m_it=s.begin();m_it!=s.end();m_it++)
+	while(ka>=0)
 	{
-		if(m_it->second!=0.0&&m_it->second!=-0.0)
-			i1++;
+		C.push_back(A[ka]); 
+		ka--;
 	}
-	printf("%d",i1);
-	for(map<int,double>::reverse_iterator m_it=s.rbegin();m_it!=s.rend();m_it++)
+	while(kb>=0)
 	{
-		if(m_it->second!=0.0&&m_it->second!=-0.0)
-			printf(" %d %.1lf",m_it->first,m_it->second);
+		C.push_back(B[kb]); 
+		kb--;
 	}
-	printf("\n");
+	for(i=0;i<C.size();i++)
+	{
+		if(C[i].coefficient <0.1 && C[i].coefficient > -0.1)
+			continue;
+		D.push_back(C[i]);
+	}
+	printf("%d",D.size());
+	if(D.size()==0)
+		return 0;
+	printf(" ");
+	for(i=D.size()-1;i>=0;i--)
+	{
+		printf("%d %.1f",D[i].exponent,D[i].coefficient);
+		if(i!=0)
+			printf(" ");
+	}
 	return 0;
 }
 
